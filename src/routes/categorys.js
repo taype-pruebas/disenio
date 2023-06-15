@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import categorysController from "../controllers/categorysController";
+import { verifyToken } from "../utils/verifytoken";
 
 const categorysRouter = express.Router();
 const jsonParser = bodyParser.json();
@@ -15,14 +16,14 @@ categorysRouter
 
     return res.status(response.status_code).json({ ...response });
   })
-  .post(jsonParser, async (req, res) => {
+  .post(jsonParser, verifyToken, async (req, res) => {
     const category = req?.body;
 
     const response = await createCategory(category);
 
     return res.status(response.status_code).json({ ...response });
   })
-  .put(jsonParser, async (req, res) => {
+  .put(jsonParser, verifyToken, async (req, res) => {
     const category = req?.body;
 
     const response = await updateCategory(category);
