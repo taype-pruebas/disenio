@@ -18,7 +18,7 @@ export const createUserOrm = async (user) => {
       .findOne({ user_email: user.user_email })
       .then((user) => (data = user))
       .catch((err) => {
-        error = err;
+        error = err._error;
       });
 
     if (data) {
@@ -64,7 +64,7 @@ export const loginUserOrm = async (user) => {
       .findOne({ user_email: user.user_email })
       .then((user) => (data = user))
       .catch((err) => {
-        error = err;
+        error = err._erro;
       });
 
     if (!data) {
