@@ -104,10 +104,10 @@ export const loginUserOrm = async (user) => {
       }
     );
 
+
     return {
       status_code: codeSuccess,
-      data: { ...data, user_token: token },
-
+      user: { data, user_token: token },
       message: "Inicio de sesion exitoso",
     };
   } catch (error) {
