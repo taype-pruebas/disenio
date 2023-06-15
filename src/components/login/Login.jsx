@@ -8,23 +8,32 @@ import { ErrorMessage, Field, Formik, Form } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRef } from "react";
+import { handleNotification } from "../../utils/notifications";
+import axiosConfig from "../../utils/axiosConfig";
 
 const Login = ({ setOpenLogin }) => {
   const closeModal = () => setOpenLogin(false);
 
   const modal = useRef();
 
-  const handleNotification = () =>
-    toast.error("🦄 Wow so easy!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: 1,
-      theme: "dark",
-    });
+  const userLogin = (values, { setSubmitting }) => {
+    axiosConfig
+      .post("auth/login", { ...values })
+      .then(({ data }) => {
+        handleNotification(data.status_code, data.message);
+        setSubmitting(false);
+        // closeModal();
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        handleNotification(
+          err.response.data.status_code,
+          err.response.data.message
+        );
+
+        setSubmitting(false);
+      });
+  };
 
   const userRegisterSchema = Yup.object().shape({
     user_email: Yup.string()
@@ -69,10 +78,7 @@ const Login = ({ setOpenLogin }) => {
             user_password: "",
           }}
           validationSchema={userRegisterSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
-            setSubmitting(false);
-          }}
+          onSubmit={userLogin}
         >
           {({ isSubmitting }) => (
             <Form className={styles.form}>
@@ -83,7 +89,12 @@ const Login = ({ setOpenLogin }) => {
                   <label htmlFor="user_email">
                     <MdAlternateEmail />
                   </label>
-                  <Field type="email" name="user_email" id="user_email" />
+                  <Field
+                    type="email"
+                    name="user_email"
+                    id="user_email"
+                    placeholder="Ingrese su contraseña"
+                  />
                 </section>
                 <ErrorMessage
                   name="user_email"
@@ -102,6 +113,7 @@ const Login = ({ setOpenLogin }) => {
                     type="password"
                     name="user_password"
                     id="user_password"
+                    placeholder="Ingrese su contraseña"
                   />
                 </section>
                 <ErrorMessage

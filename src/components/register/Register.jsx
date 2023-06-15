@@ -4,26 +4,33 @@ import { MdAlternateEmail } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 import * as Yup from "yup";
 import { ErrorMessage, Field, Formik, Form } from "formik";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRef } from "react";
+import axiosConfig from "../../utils/axiosConfig";
+import { handleNotification } from "../../utils/notifications";
 
 const Register = ({ setOpenRegister }) => {
   const closeModal = () => setOpenRegister(false);
 
   const modal = useRef();
 
-  const handleNotification = () =>
-    toast.error("🦄 Wow so easy!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: 1,
-      theme: "dark",
-    });
+  const registerUser = (values, { setSubmitting }) => {
+    axiosConfig
+      .post("auth/register", { ...values })
+      .then(({ data }) => {
+        handleNotification(data.status_code, data.message);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+        handleNotification(
+          err.response.data.status_code,
+          err.response.data.message
+        );
+      });
+    setSubmitting(false);
+  };
 
   const userRegisterSchema = Yup.object().shape({
     user_name: Yup.string()
@@ -76,10 +83,7 @@ const Register = ({ setOpenRegister }) => {
             user_password: "",
           }}
           validationSchema={userRegisterSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
-            setSubmitting(false);
-          }}
+          onSubmit={registerUser}
         >
           {({ isSubmitting }) => (
             <Form className={styles.form}>
@@ -110,7 +114,12 @@ const Register = ({ setOpenRegister }) => {
                   <label htmlFor="user_lastname">
                     <AiOutlineUser />
                   </label>
-                  <Field type="text" name="user_lastname" id="user_lastname" />
+                  <Field
+                    type="text"
+                    name="user_lastname"
+                    id="user_lastname"
+                    placeholder="Ingrese su apellido"
+                  />
                 </section>
                 <ErrorMessage
                   name="user_lastname"
@@ -125,7 +134,12 @@ const Register = ({ setOpenRegister }) => {
                   <label htmlFor="user_email">
                     <MdAlternateEmail />
                   </label>
-                  <Field type="email" name="user_email" id="user_email" />
+                  <Field
+                    type="email"
+                    name="user_email"
+                    id="user_email"
+                    placeholder="Ingrese su correo"
+                  />
                 </section>
                 <ErrorMessage
                   name="user_email"
@@ -144,6 +158,7 @@ const Register = ({ setOpenRegister }) => {
                     type="password"
                     name="user_password"
                     id="user_password"
+                    placeholder="Ingrese una contraseña"
                   />
                 </section>
                 <ErrorMessage
