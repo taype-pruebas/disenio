@@ -1,0 +1,96 @@
+.container {
+  width: 100vw;
+  min-height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: black;
+}
+
+.containerLogin {
+  background-color: #cc94f2;
+  border-radius: 1rem;
+  box-shadow: 0 0 rgb(197, 68, 68) 3px;
+  padding: 1rem;
+  position: relative;
+  width: 90%;
+  max-width: 600px;
+}
+
+.iconClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.header {
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  color: #15202b;
+}
+
+.header p {
+  font-style: italic;
+  color: #15202b;
+}
+
+.form {
+  padding: 10px;
+}
+
+.formItem {
+  margin-bottom: 0.8rem;
+}
+
+.formField {
+  border: 1px solid #15202b;
+  border-radius: 5px;
+  width: 100%;
+  /* font-size: 1.4rem; */
+  background-color: #f0ce26;
+}
+
+.formField label {
+  height: 100%;
+}
+
+.formField input {
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  height: 100%;
+  font-size: 1rem;
+  background-color: inherit;
+  width: max-content;
+  color: #051026;
+}
+
+.formField input::placeholder {
+  color: rgb(4, 4, 73);
+}
+
+.btnRegister {
+  width: 300px;
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #15202b;
+  color: white;
+  font-size: 1.3rem;
+  border-radius: 10px;
+}
+
+.textError {
+  color: red;
+}

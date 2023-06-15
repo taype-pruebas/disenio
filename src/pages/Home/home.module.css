@@ -1,0 +1,25 @@
+.main {
+  display: flex;
+}
+
+@media screen and (min-width: 768px) {
+  /* flex total = 10 */
+  .main {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .menu {
+    flex: 3;
+    /* background-color: red; */
+  }
+  .content {
+    flex: 5;
+    background-color: blue;
+  }
+  .tendence {
+    flex: 3;
+    background-color: red;
+  }
+}
