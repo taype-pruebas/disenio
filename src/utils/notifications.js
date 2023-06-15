@@ -5,7 +5,7 @@ export const handleNotification = (error, message) => {
     case 404:
       toast.error(`${message}`, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 300,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -17,7 +17,7 @@ export const handleNotification = (error, message) => {
     case 200:
       toast.success(`${message}`, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 300,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
@@ -29,7 +29,7 @@ export const handleNotification = (error, message) => {
     case 500:
       toast.info(`${message}`, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 300,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,

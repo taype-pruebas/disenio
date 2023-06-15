@@ -16,11 +16,12 @@ const Register = ({ setOpenRegister }) => {
   const modal = useRef();
 
   const registerUser = (values, { setSubmitting }) => {
+
     axiosConfig
       .post("auth/register", { ...values })
       .then(({ data }) => {
+        console.log("token", data.token);
         handleNotification(data.status_code, data.message);
-        console.log(data);
       })
       .catch((err) => {
         console.log(err.response.data);
@@ -54,10 +55,10 @@ const Register = ({ setOpenRegister }) => {
       onClick={(e) => {
         e.stopPropagation();
 
-        if (e.target == modal.current) {
-          // console.log("fyerra el modal");
-          closeModal();
-        }
+        // if (e.target == modal.current) {
+        //   // console.log("fyerra el modal");
+        //   closeModal();
+        // }
       }}
     >
       <section className={styles.containerLogin}>
@@ -180,8 +181,8 @@ const Register = ({ setOpenRegister }) => {
         </Formik>
         <ToastContainer
           position="top-right"
-          autoClose={5000}
-          limit={2}
+          autoClose={300}
+          limit={4}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

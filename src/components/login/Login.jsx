@@ -1,3 +1,4 @@
+
 import styles from "./login.module.css";
 
 import { AiFillCloseCircle, AiOutlineUser } from "react-icons/ai";
@@ -10,8 +11,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRef } from "react";
 import { handleNotification } from "../../utils/notifications";
 import axiosConfig from "../../utils/axiosConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from '../../redux/states/user';
 
 const Login = ({ setOpenLogin }) => {
+  const userState = useSelector((store) => store.user);
+
+  
+
   const closeModal = () => setOpenLogin(false);
 
   const modal = useRef();
@@ -20,7 +27,13 @@ const Login = ({ setOpenLogin }) => {
     axiosConfig
       .post("auth/login", { ...values })
       .then(({ data }) => {
+        console.log(data);
         handleNotification(data.status_code, data.message);
+
+        const user  =data.user.data
+
+        useDispatch(loginUser({user}));
+
         setSubmitting(false);
         // closeModal();
       })
@@ -51,10 +64,10 @@ const Login = ({ setOpenLogin }) => {
       onClick={(e) => {
         e.stopPropagation();
 
-        if (e.target == modal.current) {
-          // console.log("fyerra el modal");
-          closeModal();
-        }
+        // if (e.target == modal.current) {
+        //   // console.log("fyerra el modal");
+        //   closeModal();
+        // }
       }}
     >
       <section className={styles.containerLogin}>
@@ -135,12 +148,12 @@ const Login = ({ setOpenLogin }) => {
         </Formik>
         <ToastContainer
           position="top-right"
-          autoClose={5000}
-          limit={2}
+          autoClose={2000}
+          limit={4}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
-          rtl={false}
+          rtl={true}
           pauseOnFocusLoss
           draggable
           pauseOnHover
