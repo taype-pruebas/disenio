@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 // rutas
 import rootRouter from "../routes";
@@ -12,8 +13,10 @@ dotenv.config();
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(cors({ extended: true }));
-server.use("/api", rootRouter);
 server.use(cors());
+server.use(cookieParser());
+
+server.use("/api", rootRouter);
 
 mongoose.connect(process.env.MONGO_URI);
 mongoose.connection.on("connected", () => {

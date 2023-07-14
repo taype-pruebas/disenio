@@ -7,9 +7,13 @@ export const verifyToken = (req, res, next) => {
   // comprobar cabecera de la peticion (x-access-token)
   let token = req.headers["x-access-token"];
 
+  // let token = req.cookies.jwt;
+
+  console.log(token);
+
   // comprobar si viene o no token
   if (!token) {
-    return res.send(codeError).send({
+    return res.send(codeError).json({
       status_code: codeError,
       message: "No tienes permisos para usar",
     });
@@ -20,7 +24,7 @@ export const verifyToken = (req, res, next) => {
     if (err) {
       return res.status(500).json({
         status_code: codeErrorInternal,
-        message: "Errores internos al validar token",
+        message: `${err.message || "Errores internos al validar token"},`,
       });
     }
 

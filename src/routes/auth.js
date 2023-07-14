@@ -29,12 +29,18 @@ authRouter
 
 authRouter.route("/login").post(jsonParser, async (req, res) => {
   const user = req?.body;
+
   /**
    * Enviar
    * @user_email String
    * @user_password String
    */
+
   const response = await loginUser(user);
+
+  if (response.user_token) {
+    res.cookie("jwt", response.user_token);
+  }
 
   return res.status(response.status_code).json({ ...response });
 });

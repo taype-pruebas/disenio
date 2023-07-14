@@ -57,23 +57,24 @@ export const createUserOrm = async (user) => {
 
 export const loginUserOrm = async (user) => {
   try {
-    let data;
+    let data = {};
     let error;
 
     await userModel
       .findOne({ user_email: user.user_email })
-      .then((user) => (data = user))
+      .then((user) => {
+        data = { ...data, user };
+      })
       .catch((err) => {
         error = err._erro;
       });
 
-    if (!data) {
+    if (!data.user) {
       return {
         status_code: codeError,
         message: "Aun no esta registrado.",
       };
     }
-
     if (error) {
       return {
         status_code: codeErrorInternal,
@@ -83,7 +84,7 @@ export const loginUserOrm = async (user) => {
 
     let validPassword = await bcrypt.compare(
       user.user_password,
-      data.user_password
+      data.user.user_password
     );
 
     if (!validPassword) {
@@ -104,10 +105,10 @@ export const loginUserOrm = async (user) => {
       }
     );
 
-
     return {
       status_code: codeSuccess,
-      user: { data, user_token: token },
+      user_token: token,
+      ...data,
       message: "Inicio de sesion exitoso",
     };
   } catch (error) {

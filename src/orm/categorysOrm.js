@@ -52,7 +52,7 @@ export const createCategoryOrm = async (category) => {
     if (data) {
       return {
         status_code: codeError,
-        message: "Ya existe una herramienta",
+        message: "Ya existe una categoria",
       };
     }
 

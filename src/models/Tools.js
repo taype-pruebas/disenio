@@ -25,5 +25,13 @@ const toolIntity = () => {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Categorys",
     },
+    user_created: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+    },
   });
+
+  return mongoose.models.Tools || mongoose.model("Tools", toolSchema);
 };
+
+export const Tools = toolIntity();
