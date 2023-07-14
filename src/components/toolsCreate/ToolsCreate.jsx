@@ -1,51 +1,42 @@
-import styles from "./register.module.css";
-import { AiFillCloseCircle, AiOutlineUser } from "react-icons/ai";
-import { MdAlternateEmail } from "react-icons/md";
-import { FaKey } from "react-icons/fa";
-import * as Yup from "yup";
-import { ErrorMessage, Field, Formik, Form } from "formik";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useRef } from "react";
+import { useSelector } from "react-redux";
+import styles from "./toolsCreate.module,css";
 import axiosConfig from "../../utils/axiosConfig";
-import { handleNotification } from "../../utils/notifications";
-import lowerCaseObject from "../../utils/lowerCaseObject";
 
-const Register = ({ setOpenRegister }) => {
-  const closeModal = () => setOpenRegister(false);
+const ToolsCreate = () => {
+  categorys;
 
+  const closeModal = () => setOpenLogin(false);
+
+  const formRef = useRef();
   const modal = useRef();
 
-  const registerUser = (values, { setSubmitting }) => {
+  const createTool = (values, { setSubmitting }) => {
     let valueUser = lowerCaseObject(values);
 
     axiosConfig
-      .post("auth/register", { ...valueUser })
-      .then(({ data }) => {
-        console.log("token", data.token);
-        console.log("data", data);
-        handleNotification(data.status_code, data.message);
+      .post("7", { ...valueUser })
+      .then((response) => {
+        handleNotification(response.data.status_code, response.data.message);
+        formRef.current.reset();
+        setSubmitting(false);
       })
       .catch((err) => {
-        console.log(err);
         handleNotification(
-          err.response.data.status_code,
-          err.response.data.message
+          err?.response?.data.status_code,
+          err?.response?.data.message
         );
+
+        setSubmitting(false);
       });
-    setSubmitting(false);
   };
 
-  const userRegisterSchema = Yup.object().shape({
-    user_name: Yup.string()
-      .min(5, "Nombre usuario muy pequeño.")
-      .required("El nombre de usuario es requerido."),
-    user_lastname: Yup.string()
-      .min(5, "Apellido muy pequeño.")
-      .required("El apellido de usuario es requerido."),
+  const toolSchema = Yup.object().shape({
     user_email: Yup.string()
       .email("Ingresar un email válido.")
       .required("El email de usuario es requerido."),
+    user_password: Yup.string()
+      .min(5, "Contraseña muy pequeño.")
+      .required("La contraseña es requerida."),
     user_password: Yup.string()
       .min(5, "Contraseña muy pequeño.")
       .required("La contraseña es requerida."),
@@ -75,62 +66,20 @@ const Register = ({ setOpenRegister }) => {
         {/* header modal */}
         <section className={styles.header}>
           <h1>Dev Connect</h1>
-          <p>Es el momento de unirte - crea tus credenciales</p>
+          <p>Comparte tus herramientas con los demas.</p>
         </section>
 
         {/* body modal */}
         <Formik
           initialValues={{
-            user_name: "",
-            user_lastname: "",
             user_email: "",
             user_password: "",
           }}
           validationSchema={userRegisterSchema}
-          onSubmit={registerUser}
+          onSubmit={userLogin}
         >
           {({ isSubmitting }) => (
-            <Form className={styles.form}>
-              {/* name user */}
-              <section className={styles.formItem}>
-                <p>nombre: </p>
-                <section className={styles.formField}>
-                  <label htmlFor="user_name">
-                    <AiOutlineUser />
-                  </label>
-                  <Field
-                    type="text"
-                    name="user_name"
-                    id="user_name"
-                    placeholder="Ingrese nombre"
-                  />
-                </section>
-                <ErrorMessage
-                  name="user_name"
-                  component={"p"}
-                  className={styles.textError}
-                />
-              </section>
-              {/* name lastanme */}
-              <section className={styles.formItem}>
-                <p>apellido: </p>
-                <section className={styles.formField}>
-                  <label htmlFor="user_lastname">
-                    <AiOutlineUser />
-                  </label>
-                  <Field
-                    type="text"
-                    name="user_lastname"
-                    id="user_lastname"
-                    placeholder="Ingrese su apellido"
-                  />
-                </section>
-                <ErrorMessage
-                  name="user_lastname"
-                  component={"p"}
-                  className={styles.textError}
-                />
-              </section>
+            <Form className={styles.form} ref={formRef}>
               {/* user email */}
               <section className={styles.formItem}>
                 <p>Correo: </p>
@@ -142,7 +91,7 @@ const Register = ({ setOpenRegister }) => {
                     type="email"
                     name="user_email"
                     id="user_email"
-                    placeholder="Ingrese su correo"
+                    placeholder="Ingrese su contraseña"
                   />
                 </section>
                 <ErrorMessage
@@ -162,7 +111,7 @@ const Register = ({ setOpenRegister }) => {
                     type="password"
                     name="user_password"
                     id="user_password"
-                    placeholder="Ingrese una contraseña"
+                    placeholder="Ingrese su contraseña"
                   />
                 </section>
                 <ErrorMessage
@@ -177,19 +126,19 @@ const Register = ({ setOpenRegister }) => {
                 disabled={isSubmitting}
                 className={styles.btnRegister}
               >
-                Registrarse
+                Iniciar sesión
               </button>
             </Form>
           )}
         </Formik>
         <ToastContainer
           position="top-right"
-          autoClose={300}
+          autoClose={2000}
           limit={4}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
-          rtl={false}
+          rtl={true}
           pauseOnFocusLoss
           draggable
           pauseOnHover
@@ -199,4 +148,4 @@ const Register = ({ setOpenRegister }) => {
     </article>
   );
 };
-export default Register;
+export default ToolsCreate;

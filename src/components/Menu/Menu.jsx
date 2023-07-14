@@ -4,8 +4,13 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 // import { Icon } from "react-icons";
 import { Link, NavLink } from "react-router-dom";
 import styles from "./menu.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../redux/states/user";
 
 const Menu = ({ user, setOpenRegister, setOpenLogin }) => {
+  const dispatcher = useDispatch();
+  const userState = useSelector((store) => store.user);
+
   const links = [
     { name: "Home", route: "/", icon: AiOutlineHome },
     { name: "Explorar", route: "/tools", icon: BiHash },
@@ -15,6 +20,10 @@ const Menu = ({ user, setOpenRegister, setOpenLogin }) => {
       icon: IoIosNotificationsOutline,
     },
   ];
+
+  const logout = () => {
+    dispatcher(logoutUser());
+  };
 
   const openModalRegister = () => setOpenRegister(true);
   const openModalLogin = () => setOpenLogin(true);
@@ -45,10 +54,13 @@ const Menu = ({ user, setOpenRegister, setOpenLogin }) => {
       </article>
 
       <article>
-        {user ? (
+        {userState && userState.user_name ? (
           <section className={`${styles.user}`}>
-            <p>{user}</p>
-            <button className={`${styles.btn} ${styles.btnClose}`}>
+            <p>{userState.user_name}</p>
+            <button
+              className={`${styles.btn} ${styles.btnClose}`}
+              onClick={logout}
+            >
               Cerrar sesion
             </button>
           </section>

@@ -1,0 +1,33 @@
+.container_tools {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.tool {
+  border: 1px solid rgb(226, 223, 223);
+  border-radius: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.5rem;
+  /* overflow: hidden; */
+}
+
+.tool img {
+  width: 70%;
+  height: 80px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.tool a {
+  color: #f0ce26;
+}
+
+.tool a:hover {
+  color: rgb(53, 53, 143);
+  font-size: 1.1rem;
+}

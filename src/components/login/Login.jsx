@@ -1,4 +1,3 @@
-
 import styles from "./login.module.css";
 
 import { AiFillCloseCircle, AiOutlineUser } from "react-icons/ai";
@@ -11,37 +10,43 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRef } from "react";
 import { handleNotification } from "../../utils/notifications";
 import axiosConfig from "../../utils/axiosConfig";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from '../../redux/states/user';
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../redux/states/user";
+import lowerCaseObject from "../../utils/lowerCaseObject";
 
 const Login = ({ setOpenLogin }) => {
-  const userState = useSelector((store) => store.user);
-
-  
+  // enviar info state
+  const dispatccher = useDispatch();
 
   const closeModal = () => setOpenLogin(false);
 
+  const formRef = useRef();
   const modal = useRef();
 
   const userLogin = (values, { setSubmitting }) => {
+    let valueUser = lowerCaseObject(values);
+
     axiosConfig
-      .post("auth/login", { ...values })
-      .then(({ data }) => {
-        console.log(data);
-        handleNotification(data.status_code, data.message);
+      .post("auth/login", { ...valueUser })
+      .then((response) => {
+        handleNotification(response.data.status_code, response.data.message);
+        const user = response.data.user;
 
-        const user  =data.user.data
+        dispatccher(loginUser(user));
+        console.log(response.data);
 
-        useDispatch(loginUser({user}));
-
+        formRef.current.reset();
         setSubmitting(false);
+
+        // window.location.href = "/";
         // closeModal();
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log("respuesta bad", err);
+        console.log("respuesta bad", err?.response?.data);
         handleNotification(
-          err.response.data.status_code,
-          err.response.data.message
+          err?.response?.data.status_code,
+          err?.response?.data.message
         );
 
         setSubmitting(false);
@@ -94,7 +99,7 @@ const Login = ({ setOpenLogin }) => {
           onSubmit={userLogin}
         >
           {({ isSubmitting }) => (
-            <Form className={styles.form}>
+            <Form className={styles.form} ref={formRef}>
               {/* user email */}
               <section className={styles.formItem}>
                 <p>Correo: </p>
